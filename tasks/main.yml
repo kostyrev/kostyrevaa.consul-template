@@ -1,0 +1,9 @@
+---
+# tasks file for kostyrevaa.consul-template
+
+- include: user.yml
+  when: consul_template_create_user
+
+- include: install.yml
+- include: config.yml
+- include: service.yml

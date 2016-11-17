@@ -1,0 +1,43 @@
+---
+# defaults file for kostyrevaa.consul-template
+consul_template_create_user: true
+consul_template_user: consul-template
+consul_template_group: "{{ consul_template_user }}"
+consul_template_user_home: "/var/lib/{{ consul_template_user }}"
+consul_template_service_name: "{{ consul_template_user }}"
+
+consul_template_work_dir: "/etc/{{ consul_template_user }}"
+consul_template_conf_dir: "{{ consul_template_work_dir }}/conf"
+consul_template_log_dir:  "/var/log/{{ consul_template_user }}"
+
+consul_template_version: 0.16.0
+consul_template_pkg:     "consul-template_{{ consul_template_version }}_linux_amd64.zip"
+consul_template_pkg_url: "https://releases.hashicorp.com/consul-template/{{ consul_template_version }}/{{ consul_template_pkg }}"
+
+
+consul_template_checksum_file:     "consul-template_{{ consul_template_version }}_SHA256SUMS"
+consul_template_checksum_file_url: "https://releases.hashicorp.com/consul-template/{{ consul_template_version }}/{{ consul_template_checksum_file }}"
+
+consul_template_download_dir: /root
+
+consul_template_bin_dir:  "/usr/local/bin"
+consul_template_pid_dir:  "/var/run"
+
+consul_template_use_systemd: false
+consul_template_use_upstart: false
+consul_template_use_initd: true
+
+consul_template_use_config_dir: false
+
+consul_template_config_file_template: consul-template.cfg.j2
+consul_template_config_file: consul-template.cfg
+
+consul_template_log_file: /var/log/consul-template
+consul_template_log_level: "INFO"
+
+consul_template_consul_server: "127.0.0.1"
+consul_template_consul_port: "8500"
+
+consul_template_template_files: [] # see readme for usage
+consul_template_templates: [] # - {name: "template.ctmpl", dest: "/path/on/disk/where/template/will/render", cmd: "optional command to run when the template is updated", perms: 0600, backup: false}
+consul_template_template_templates: [] # - {name: "template.ctmpl.j2", dest: "/path/on/disk/where/template/will/render", cmd: "optional command to run when the template is updated", perms: 0600, backup: true}

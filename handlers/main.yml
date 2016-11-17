@@ -1,0 +1,4 @@
+---
+# handlers file for kostyrevaa.consul-template
+- name: restart consul-template
+  action: service name=consul-template state=restarted

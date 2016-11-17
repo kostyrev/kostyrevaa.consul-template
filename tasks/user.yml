@@ -1,0 +1,14 @@
+---
+
+- name: Create Consul template group
+  group: name={{ consul_template_group }} system=yes state=present
+
+- name: Create Consul template user
+  user: >
+    name={{ consul_template_user }}
+    shell=/bin/false
+    createhome={{ true if consul_template_user_home is defined else false }}
+    home={{ consul_template_user_home if consul_template_user_home is defined else omit }}
+    group={{ consul_template_group }}
+    system=yes
+    state=present

@@ -1,0 +1,43 @@
+---
+
+- name: install deps
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - unzip
+
+- name: Create consul-template directory structure
+  file:
+    dest:  "{{ item }}"
+    owner: root
+    group: root
+    mode:  0755
+    state: directory
+  with_items:
+    - "{{ consul_template_work_dir }}"
+    - "{{ consul_template_conf_dir }}"
+    - "{{ consul_template_work_dir }}/templates"
+
+- name: Get consul-template package checksum file
+  get_url:
+    url: "{{ consul_template_checksum_file_url }}"
+    dest: "{{ consul_template_download_dir }}"
+
+- name: Get checksum of consul-template package
+  shell: >
+    grep {{ consul_template_pkg }} {{ consul_template_download_dir }}/{{ consul_template_checksum_file }}
+  register: chksum
+  changed_when: False
+
+- name: Download consul-template package
+  get_url:
+    url:      "{{ consul_template_pkg_url }}"
+    dest:     "{{ consul_template_download_dir }}/{{ consul_template_pkg }}"
+    checksum: "sha256:{{ chksum.stdout.split(' ')|first }}"
+
+- name: Unzip Consul to installation directory
+  unarchive: 
+    src:  "{{ consul_template_download_dir }}/{{ consul_template_pkg }}"
+    dest: "{{ consul_template_bin_dir }}"
+    copy: no

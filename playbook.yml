@@ -1,0 +1,11 @@
+---
+- hosts: all
+  strategy: debug
+  vars:
+    consul_template_template_files:
+      - { src: "./test/fixture/template/consul.ctmpl" }
+    consul_template_templates: 
+      - {name: "consul.ctmpl", dest: "/tmp/service-consul", cmd: "touch /tmp/service-consul-updated"}
+
+  roles:
+    - kostyrevaa.consul-template

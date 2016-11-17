@@ -1,0 +1,59 @@
+---
+
+- name: copy consul-template systemd service configuration
+  template: >
+    src=consul-template.service.systemd.j2
+    dest=/etc/systemd/system/consul-template.service
+    mode=0755
+  when: consul_template_use_systemd
+
+- name: copy consul-template upstart service configuration
+  template: >
+    src=consul-template.service.upstart.j2
+    dest=/etc/init/consul-template.conf
+    mode=0755
+  when: consul_template_use_upstart
+
+- name: copy consul-template initd service configuration
+  template: >
+    src=consul-template.service.initd.j2
+    dest=/etc/init.d/consul-template
+    mode=0755
+  when: consul_template_use_initd
+
+- name: update sysconfig /etc/sysconfig/consul-template
+  template:
+    src: sysconfig.j2
+    dest: /etc/sysconfig/consul-template
+    owner: root
+    group: root
+    mode: '0644'
+  tags:
+    - consul
+    - consul-template
+
+- name: consul-template config file
+  template: >
+    src={{ consul_template_config_file_template }}
+    dest={{ consul_template_work_dir }}/conf/{{ consul_template_config_file }}
+    mode=0644
+  tags:
+    - consul-template-config
+
+- name: copy template files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ consul_template_work_dir }}/templates/{{ item.src | basename }}"
+  with_items: "{{ consul_template_template_files }}"
+  when: consul_template_template_files
+  notify: restart consul-template
+  tags:
+    - consul-template-config
+
+- name: copy template templates
+  template: src={{ item.src }} dest="{{ consul_template_work_dir }}/templates/{{ item.src | basename | regex_replace('^(.*)\.j2$', '\\1') }}"
+  with_items: "{{ consul_template_template_templates | default([]) }}"
+  when: consul_template_template_templates
+  notify: restart consul-template
+  tags:
+    - consul-template-config
