@@ -33,7 +33,7 @@ logfile="/var/log/$prog"
 # pull in sysconfig settings
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
-export GOMAXPROCS=${GOMAXPROCS:--{{ ansible_processor_vcpus }} }
+export GOMAXPROCS=${GOMAXPROCS:--{{ ansible_processor_vcpus }}}
 export MAXWAIT=${MAXWAIT:-10}
 
 start() {
