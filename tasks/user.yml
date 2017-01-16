@@ -10,5 +10,6 @@
     createhome={{ true if consul_template_user_home is defined else false }}
     home={{ consul_template_user_home if consul_template_user_home is defined else omit }}
     group={{ consul_template_group }}
+    groups="{{ consul_template_groups|join(',') if consul_template_groups is defined else omit }}"
     system=yes
     state=present
