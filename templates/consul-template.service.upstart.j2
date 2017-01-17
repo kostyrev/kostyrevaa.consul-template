@@ -3,11 +3,7 @@ description "Consul Template"
 start on (local-filesystems and net-device-up IFACE!=lo)
 stop on runlevel [06]
 
-{% if consul_template_use_config_dir %}
-exec {{ consul_template_home }}/bin/{{ consul_template_binary }}  -config={{ consul_template_home }}/config >> {{ consul_template_log_file }} 2>&1
-{% else %}
-exec {{ consul_template_home }}/bin/{{ consul_template_binary }}  -config={{ consul_template_home }}/config/{{ consul_template_config_file }} >> {{ consul_template_log_file }} 2>&1
-{% endif %}
+exec {{ consul_template_bin_dir }}/{{ consul_template_binary }} -config={{ consul_template_conf_dir }}/{{ consul_template_config_file }} >> {{ consul_template_log_file }} 2>&1
 
 respawn
 respawn limit 10 10

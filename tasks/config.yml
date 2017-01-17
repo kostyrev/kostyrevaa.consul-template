@@ -28,6 +28,7 @@
     owner: root
     group: root
     mode: '0644'
+  when: consul_template_use_initd
   tags:
     - consul
     - consul-template
