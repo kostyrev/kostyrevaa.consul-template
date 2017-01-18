@@ -3,7 +3,9 @@ description "Consul Template"
 start on (local-filesystems and net-device-up IFACE!=lo)
 stop on runlevel [06]
 
-exec {{ consul_template_bin_dir }}/{{ consul_template_binary }} -config={{ consul_template_conf_dir }}/{{ consul_template_config_file }} >> {{ consul_template_log_file }} 2>&1
+script
+  exec start-stop-daemon --start --chuid {{ consul_template_user }} --group {{ consul_template_group }} --exec {{ consul_template_bin_dir }}/{{ consul_template_binary }} -- -config={{ consul_template_conf_dir }}/{{ consul_template_config_file }} >> {{ consul_template_log_file }} 2>&1
+end script
 
 respawn
 respawn limit 10 10
